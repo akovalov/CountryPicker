@@ -78,7 +78,9 @@ open class CountryPickerController: UIViewController {
     public var labelColor: UIColor = UIColor.black {
         didSet {
             self.searchController.searchBar.tintColor = labelColor
-            (self.searchController.searchBar.value(forKey: "searchField") as? UITextField)?.textColor = labelColor
+            if #available(iOS 13.0, *) {
+                self.searchController.searchBar.searchTextField.textColor = labelColor
+            }
             self.tableView.reloadData()
         }
     }
@@ -271,6 +273,7 @@ extension CountryPickerController: UITableViewDelegate, UITableViewDataSource {
         cell.accessoryType = .none
         cell.checkMarkImageView.isHidden = true
         cell.checkMarkImageView.image = checkMarkImage
+        cell.selectionStyle = .none
         
         var country: Country
         
