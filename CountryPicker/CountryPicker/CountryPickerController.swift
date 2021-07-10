@@ -78,6 +78,7 @@ open class CountryPickerController: UIViewController {
     public var labelColor: UIColor = UIColor.black {
         didSet {
             self.searchController.searchBar.tintColor = labelColor
+            (self.searchController.searchBar.value(forKey: "searchField") as? UITextField)?.textColor = labelColor
             self.tableView.reloadData()
         }
     }
@@ -168,11 +169,6 @@ open class CountryPickerController: UIViewController {
         super.viewDidAppear(animated)
         if #available(iOS 11.0, *) {
             navigationItem.hidesSearchBarWhenScrolling = true
-        }
-        
-        /// Request for previous country and automatically scroll table view to item
-        if let previousCountry = CountryManager.shared.lastCountrySelected {
-            scrollToCountry(previousCountry)
         }
     }
     
@@ -314,7 +310,7 @@ extension CountryPickerController: UITableViewDelegate, UITableViewDataSource {
         
         CountryManager.shared.lastCountrySelected = selectedCountry
             
-        dismiss(animated: true) {
+        navigationController?.dismiss(animated: true) {
             self.callBack?(selectedCountry)
         }
     }
