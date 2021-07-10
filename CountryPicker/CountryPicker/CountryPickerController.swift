@@ -91,6 +91,14 @@ open class CountryPickerController: UIViewController {
         didSet { self.tableView.reloadData() }
     }
     
+    public var backgroundColor: UIColor = .white {
+        didSet {
+            self.view.backgroundColor = backgroundColor
+            self.tableView.backgroundColor = backgroundColor
+            self.tableView.reloadData()
+        }
+    }
+    
     public var isCountryFlagHidden: Bool = false {
         didSet { self.tableView.reloadData() }
     }
@@ -289,15 +297,11 @@ extension CountryPickerController: UITableViewDelegate, UITableViewDataSource {
         cell.hideDialCode(isCountryDialHidden)
         
         cell.nameLabel.font = labelFont
-        if #available(iOS 13.0, *) {
-            cell.nameLabel.textColor = UIColor.label
-        } else {
-            // Fallback on earlier versions
-            cell.nameLabel.textColor = labelColor
-        }
+        cell.nameLabel.textColor = labelColor
         cell.diallingCodeLabel.font = detailFont
         cell.diallingCodeLabel.textColor = detailColor
         cell.separatorLineView.backgroundColor = self.separatorLineColor
+        cell.backgroundColor = backgroundColor
         cell.applyFlagStyle(flagStyle)
     }
     
