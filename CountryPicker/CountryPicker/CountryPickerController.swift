@@ -76,7 +76,10 @@ open class CountryPickerController: UIViewController {
     }
     
     public var labelColor: UIColor = UIColor.black {
-        didSet { self.tableView.reloadData() }
+        didSet {
+            self.searchController.searchBar.tintColor = labelColor
+            self.tableView.reloadData()
+        }
     }
     
     public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline) {
@@ -307,18 +310,13 @@ extension CountryPickerController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - TableView Delegate
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var selectedCountry = countries[indexPath.row]
-        var dismissWithAnimation = true
+        let selectedCountry = applySearch ? filterCountries[indexPath.row] : countries[indexPath.row]
         
-        if applySearch {
-            selectedCountry = filterCountries[indexPath.row]
-            dismissWithAnimation = false
-        }
-        
-        callBack?(selectedCountry)
         CountryManager.shared.lastCountrySelected = selectedCountry
             
-        dismiss(animated: dismissWithAnimation, completion: nil)
+        dismiss(animated: true) {
+            self.callBack?(selectedCountry)
+        }
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)
